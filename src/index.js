@@ -37,14 +37,6 @@ buttonAddCard.addEventListener('click', () => {
   openModal(modalAddCard);
 });
 
-buttonsCloseModal.forEach(function (button) {
-  button.addEventListener('mousedown', () => {
-    modals.forEach(function (modal) {
-      closeModal(modal);
-    });
-  });
-});
-
 function showCardImage(obj) {
   modalCardImage.src = obj.link;
   modalCardImage.alt = obj.name;

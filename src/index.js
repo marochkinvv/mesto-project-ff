@@ -1,24 +1,26 @@
 import './pages/index.css';
-import { initialCards, createCard, deleteElement, like, showCardImage } from './scripts/cards';
-import {
-  closeModal,
-  openModal,
-  modals,
-  modalEditProfile,
-  modalAddCard,
-  modalCardImage,
-} from './scripts/modal';
-import {
-  getProfile,
-  resetForm,
-} from './scripts/forms';
+import { initialCards } from './scripts/cards';
+import { createCard, deleteElement, like } from './scripts/card';
+import { closeModal, openModal } from './scripts/modal';
 
 const placesList = document.querySelector('.places__list');
 const buttonsCloseModal = document.querySelectorAll('.popup__close');
-
 const buttonEditProfile = document.querySelector('.profile__edit-button');
 const buttonAddCard = document.querySelector('.profile__add-button');
-const formNewCard = document.forms['new-place'];
+const modals = document.querySelectorAll('.popup');
+const modalEditProfile = document.querySelector('.popup_type_edit');
+const modalAddCard = document.querySelector('.popup_type_new-card');
+const modalShowCard = document.querySelector('.popup_type_image');
+const modalCardImage = document.querySelector('.popup__image');
+const modalCardTitle = document.querySelector('.popup__caption');
+const formEditProfile = document.forms['edit-profile'];
+const nameInputProfile = formEditProfile.elements.name;
+const jobInputProfile = formEditProfile.elements.description;
+const titleProfile = document.querySelector('.profile__title');
+const descriptionProfile = document.querySelector('.profile__description');
+const formAddCard = document.forms['new-place'];
+const nameAddCard = formAddCard.elements['place-name'];
+const linkAddCard = formAddCard.elements.link;
 
 initialCards.forEach((cardData) => {
   const cardElement = createCard(cardData, deleteElement, like, showCardImage);
@@ -31,33 +33,49 @@ buttonEditProfile.addEventListener('click', () => {
 });
 
 buttonAddCard.addEventListener('click', () => {
-  resetForm(formNewCard);
+  formAddCard.reset();
   openModal(modalAddCard);
 });
 
 buttonsCloseModal.forEach(function (button) {
-  button.addEventListener('click', () => {
-    closeModal(modalEditProfile);
-    closeModal(modalAddCard);
-    closeModal(modalCardImage);
+  button.addEventListener('mousedown', () => {
+    modals.forEach(function (modal) {
+      closeModal(modal);
+    });
   });
 });
 
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    closeModal(modalEditProfile);
-    closeModal(modalAddCard);
-    closeModal(modalCardImage);
-  }
-  event.target.removeEventListener('keydown', event);
-});
+function showCardImage(obj) {
+  modalCardImage.src = obj.link;
+  modalCardImage.alt = obj.name;
+  modalCardTitle.textContent = obj.name;
+  openModal(modalShowCard);
+}
 
-modals.forEach(function (modal) {
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      closeModal(modalEditProfile);
-      closeModal(modalAddCard);
-      closeModal(modalCardImage);
-    }
-  });
-});
+function getProfile() {
+  nameInputProfile.value = titleProfile.textContent;
+  jobInputProfile.value = descriptionProfile.textContent;
+}
+
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+  titleProfile.textContent = nameInputProfile.value;
+  descriptionProfile.textContent = jobInputProfile.value;
+  closeModal(modalEditProfile);
+}
+
+formEditProfile.addEventListener('submit', handleFormSubmit);
+
+function addCardFormSubmit(evt) {
+  evt.preventDefault();
+  const newCard = {};
+  newCard.name = nameAddCard.value;
+  newCard.link = linkAddCard.value;
+
+  const cardElement = createCard(newCard, deleteElement, like, showCardImage);
+  placesList.prepend(cardElement);
+  closeModal(modalAddCard);
+  formAddCard.reset();
+}
+
+formAddCard.addEventListener('submit', addCardFormSubmit);

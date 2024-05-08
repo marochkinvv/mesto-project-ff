@@ -37,6 +37,23 @@ buttonAddCard.addEventListener('click', () => {
   openModal(modalAddCard);
 });
 
+function closeByOverlay(evt) {
+  if (evt.target.classList.contains('popup_is-opened')) {
+    closeModal(evt.target);
+  }
+}
+
+modals.forEach((modal) => {
+  modal.addEventListener('mousedown', closeByOverlay);
+});
+
+buttonsCloseModal.forEach((button) => {
+  const parentModal = button.closest('.popup');
+  button.addEventListener('click', () => {
+    closeModal(parentModal);
+  });
+});
+
 function showCardImage(obj) {
   modalCardImage.src = obj.link;
   modalCardImage.alt = obj.name;

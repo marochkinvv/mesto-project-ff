@@ -3,7 +3,6 @@ const cardTemplate = document.querySelector('#card-template').content;
 // Функция создания карточки
 export function createCard(
   card,
-  toggleLike,
   deleteCard,
   showCardImage,
   currentUserId,
@@ -87,6 +86,7 @@ export function createCard(
               cardLikeCounter.classList.remove('card__like-counter_visible');
             }
             cardLikeCounter.textContent = data;
+            cardLikeButton.classList.add('card__like-button_is-active');
           })
           .catch((err) => {
             console.log(`Ошибка при добавлении лайка. ${err}`);
@@ -107,6 +107,7 @@ export function createCard(
               cardLikeCounter.classList.remove('card__like-counter_visible');
             }
             cardLikeCounter.textContent = data;
+            cardLikeButton.classList.remove('card__like-button_is-active');
           })
           .catch((err) => {
             console.log(`Ошибка при удалении лайка. ${err}`);
@@ -115,20 +116,13 @@ export function createCard(
     }
   }
 
-  cardLikeButton.addEventListener('click', () => {
-    handleLikes();
-    toggleLike(cardLikeButton);
-  });
+  cardLikeButton.addEventListener('click', handleLikes);
 
   return cardElementClone;
 }
 
 export function deleteCard(card) {
   card.remove();
-}
-
-export function toggleLike(button) {
-  button.classList.toggle('card__like-button_is-active');
 }
 
 function findProfileIdInArray(array, key) {

@@ -9,7 +9,7 @@ import {
   deleteСardFromServer,
   editAvatar,
 } from './scripts/api';
-import { createCard, deleteCard, toggleLike } from './scripts/card';
+import { createCard, deleteCard } from './scripts/card';
 import { closeModal, openModal } from './scripts/modal';
 import { enableValidation, deleteErrors } from './scripts/validation';
 
@@ -53,7 +53,6 @@ Promise.all(promises)
     cards.forEach((cardData) => {
       const cardElement = createCard(
         cardData,
-        toggleLike,
         deleteCard,
         showCardImage,
         user._id,
@@ -161,7 +160,6 @@ function addCardFormSubmit(evt) {
     .then((newCardData) => {
       const newCardElement = createCard(
         newCardData,
-        toggleLike,
         deleteCard,
         showCardImage,
         currentUserData._id,

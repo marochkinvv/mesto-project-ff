@@ -1,15 +1,15 @@
-export const clearValidation = (formElement, validationConfig) => {
+export const enableValidation = (formElement, validationConfig) => {
   const showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add(validationConfig.inputErrorClass);
+    inputElement.classList.add(validationConfig.inputErrorClassActive);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(validationConfig.errorClass);
+    errorElement.classList.add(validationConfig.errorClassActive);
   };
 
   const hideInputError = (formElement, inputElement) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(validationConfig.inputErrorClass);
-    errorElement.classList.remove(validationConfig.errorClass);
+    inputElement.classList.remove(validationConfig.inputErrorClassActive);
+    errorElement.classList.remove(validationConfig.errorClassActive);
     errorElement.textContent = '';
   };
 
@@ -57,13 +57,18 @@ export const clearValidation = (formElement, validationConfig) => {
   });
 };
 
-export const enableValidation = (validationConfig) => {
-  validationConfig = {
-    formSelector: '',
-    inputSelector: '',
-    submitButtonSelector: '',
-    inactiveButtonClass: '',
-    inputErrorClass: '',
-    errorClass: '',
-  };
-};
+export function deleteErrors(modal, validationConfig) {
+  const errorMessages = modal.querySelectorAll(validationConfig.errorSelector);
+  const errorInputs = modal.querySelectorAll(validationConfig.inputSelector);
+  const buttonSubmit = modal.querySelector(
+    validationConfig.submitButtonSelector
+  );
+  errorMessages.forEach((message) => {
+    message.classList.remove(validationConfig.errorClassActive);
+    message.textContent = '';
+  });
+  errorInputs.forEach((input) => {
+    input.classList.remove(validationConfig.inputErrorClassActive);
+  });
+  buttonSubmit.classList.add(validationConfig.inactiveButtonClass);
+}

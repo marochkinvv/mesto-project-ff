@@ -42,8 +42,13 @@ export function createCard(
   });
 
   cardDeleteButton.addEventListener('click', () => {
-    deleteCard(cardElementClone);
-    deleteCardFunction(cardId);
+    deleteCardFunction(cardId)
+      .then(() => {
+        deleteCard(cardElementClone);
+      })
+      .catch((err) => {
+        console.log(`Ошибка при удалении карточки. ${err}`);
+      });
   });
 
   // Если у карточки есть лайки, тогда отображаем счетчик лайков
@@ -82,6 +87,9 @@ export function createCard(
               cardLikeCounter.classList.remove('card__like-counter_visible');
             }
             cardLikeCounter.textContent = data;
+          })
+          .catch((err) => {
+            console.log(`Ошибка при добавлении лайка. ${err}`);
           });
       } else if (
         cardLikeButton.classList.contains('card__like-button_is-active')
@@ -99,6 +107,9 @@ export function createCard(
               cardLikeCounter.classList.remove('card__like-counter_visible');
             }
             cardLikeCounter.textContent = data;
+          })
+          .catch((err) => {
+            console.log(`Ошибка при удалении лайка. ${err}`);
           });
       }
     }
